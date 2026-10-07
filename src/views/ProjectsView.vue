@@ -56,6 +56,11 @@ const scrollToOtherEnd = () => {
 
 const setActive = (index) => {
   activeIndex.value = index
+  // Only warm the hovered project's video — the one most likely to be clicked —
+  // so its (large) file gets the full connection instead of competing with all.
+  const project = projects[index]
+  const videos = project.videos ?? (project.video ? [project.video] : [])
+  videos.forEach(preloadVideo)
 }
 
 const clearActive = () => {
@@ -74,12 +79,6 @@ onMounted(() => {
   layoutRow()
   window.addEventListener('resize', layoutRow)
   rowRef.value?.addEventListener('scroll', updateScrollEnd, { passive: true })
-
-  // Warm the browser cache so project videos are ready the moment a card is clicked.
-  projects.forEach((project) => {
-    const videos = project.videos ?? (project.video ? [project.video] : [])
-    videos.forEach(preloadVideo)
-  })
 
   gsap.fromTo(
     rootRef.value.querySelectorAll('.reveal'),
