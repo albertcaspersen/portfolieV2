@@ -20,6 +20,10 @@ const router = createRouter({
       component: () => import('../views/ProjectsView.vue'),
     },
     {
+      path: '/projects/projection',
+      redirect: '/projects/processing',
+    },
+    {
       path: '/projects/:slug',
       name: 'project-detail',
       component: () => import('../views/ProjectDetailView.vue'),

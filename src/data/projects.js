@@ -4,25 +4,38 @@
 export const projects = [
   {
     slug: 'tekstilo',
-    title: 'Tekstilo',
+    title: 'TEKSTILO',
     tag: 'Brand & web',
     year: '2024',
     image: '/projectPics/TekstiloFront.png',
     ratio: 1151 / 1367,
     description:
-      'A brand and website exploration for a textile studio. The identity leans on tactile type and a restrained palette to keep the material in focus.',
+      'Tekstilo is a digital tool designed to make better use of leftover fabric. By photographing a fabric piece, the tool analyses its shape and identifies sewing patterns that can fit within the available material, helping reduce waste while making sewing more accessible and intuitive.',
     video: null,
+    tech: ['Branding', 'Vue.js', 'GSAP', 'UX/UI', 'Computer Vision', 'JavaScript', 'Vector processing'],
+    gallery: [
+      '/projektvideo/tekstilopics/image%2056.png',
+      '/projektvideo/tekstilopics/image%2057.png',
+      '/projektvideo/tekstilopics/image%2058.png',
+      '/projektvideo/tekstilopics/image%2059.png',
+    ],
   },
   {
     slug: 'our-landscape-designs',
-    title: 'Our Landscape Designs',
-    tag: 'Concept site',
+    title: 'OUR LANDSCAPE DESIGNS',
+    tag: 'CONCEPT SITE',
     year: '2023',
     image: '/projectPics/oldFront.png',
     ratio: 1894 / 1365,
     description:
-      'A concept site for a landscape design practice. The layout gives their outdoor work room to breathe, pairing full-bleed imagery with calm, editorial typography.',
-    video: '/projektvideo/our-landscape-designs.mp4',
+      'Our Landscape Designs is a concept website created for a landscape architecture studio during my internship at Checkmate. The project focused on translating their hand-drawn sketches, watercolours and finished gardens into a digital experience that reflects the journey from initial idea to realised landscape.',
+    video: '/projektvideo/ourlandscape.mp4',
+    tech: ['Three.js', 'GSAP', 'webGL', 'Vue.js', 'UX/UI'],
+    gallery: [
+      '/projektvideo/ourlandscapephotos/oldphoto1.webp',
+      '/projektvideo/ourlandscapephotos/oldphoto2.webp',
+      '/projektvideo/ourlandscapephotos/oldphoto3.webp',
+    ],
   },
   {
     slug: 'flowmate',
@@ -32,23 +45,33 @@ export const projects = [
     image: '/projectPics/flowmateProject.png',
     ratio: 1316 / 877,
     description:
-      'A concept marketing site for a realtime editing tool, built around motion and a bright, energetic accent to sell the idea of instant collaboration.',
-    video: null,
+      'Flowmate is a headless CMS platform built to give teams more freedom when creating and managing websites. During my internship at Checkmate, I created a concept website for Flowmate, exploring how the brand and product could be presented through a more engaging and visually distinct digital experience.',
+    video: '/projektvideo/flowmateVideo.mp4',
+    tech: ['Vue.js', 'GSAP', 'OpenGL', 'UX/UI'],
+    gallery: [
+      '/projektvideo/flowmatepics/image%2060.png',
+      '/projektvideo/flowmatepics/image%2061.png',
+    ],
   },
   {
     slug: 'havet',
-    title: 'Havet',
+    title: 'Havet under pres',
     tag: 'Interactive site',
     year: '2024',
     image: '/projectPics/havetFront.png',
     ratio: 2048 / 1365,
     description:
-      'An interactive site inspired by the sea. Scroll-driven visuals and subtle depth cues invite the visitor to drift through the content.',
-    video: null,
+      'Havet under pres is an interactive educational game created with Videnskab.dk as a fictional client. Designed for school children, the project explores how complex topics about the ocean and the challenges it faces can be communicated through play and interaction. The digital experience is designed to connect with a physical arcade station using a joystick and button, turning learning into a more engaging and hands-on experience.',
+    video: '/projektvideo/HavetUnderPres.mp4',
+    tech: ['Three.js', 'webGL', 'GSAP', 'UX/UI'],
+    gallery: [
+      '/projektvideo/HavetUnderPrespics/havetpic1.png',
+      '/projektvideo/HavetUnderPrespics/havetpic2.png',
+    ],
   },
   {
-    slug: 'projection',
-    title: 'Projection',
+    slug: 'processing',
+    title: 'Processing',
     tag: 'Installation',
     year: '2023',
     image: '/projectPics/projectionproject.png',
@@ -56,6 +79,12 @@ export const projects = [
     description:
       'A projection installation exploring light as a spatial material, mapping moving imagery onto physical surfaces.',
     video: null,
+    videos: [
+      '/projektvideo/Processing/spherePort.mp4',
+      '/projektvideo/Processing/Sk%C3%A6rmoptagelse%202026-10-06%20kl.%2015.42.25.mp4',
+    ],
+    tech: ['Installation', 'Projection mapping', 'TouchDesigner'],
+    gallery: [],
   },
 ]
 

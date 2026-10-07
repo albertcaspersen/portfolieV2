@@ -127,7 +127,7 @@ onMounted(() => {
   // Scene
   scene = new THREE.Scene()
   const fogColor = 0xFF0059
-  const fogTargetDensity = 0.0105
+  const fogTargetDensity = 0.0135
   scene.background = new THREE.Color(fogColor)
   scene.fog = new THREE.FogExp2(fogColor, 0)
 

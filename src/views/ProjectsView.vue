@@ -84,7 +84,10 @@ onMounted(() => {
   rowRef.value?.addEventListener('wheel', handleWheel, { passive: false })
 
   // Warm the browser cache so project videos are ready the moment a card is clicked.
-  projects.forEach((project) => preloadVideo(project.video))
+  projects.forEach((project) => {
+    const videos = project.videos ?? (project.video ? [project.video] : [])
+    videos.forEach(preloadVideo)
+  })
 
   gsap.fromTo(
     rootRef.value.querySelectorAll('.reveal'),
