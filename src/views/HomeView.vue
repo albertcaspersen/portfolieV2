@@ -56,9 +56,16 @@ onMounted(() => {
 const onSceneLoaded = () => {
   isLoaded.value = true
   sessionStorage.setItem(PRELOADER_SESSION_KEY, '1')
+  // Uden preloader (tilbage-navigation) starter introen med det samme.
+  if (!showPreloader.value) danceRef.value?.startIntro()
   const label = headerRef.value.querySelector('.label')
   const nameLines = headerRef.value.querySelectorAll('.name-line')
   gsap.to([label, ...nameLines], { opacity: 1, y: 0, duration: 2.5, delay: 0.3, ease: 'power2.out', stagger: 0.20 })
+}
+
+// Preloaderen er færdig og fadet ud – kør først nu kamera-/tåge-introen.
+const onPreloaderComplete = () => {
+  danceRef.value?.startIntro()
 }
 
 const onSceneProgress = (value) => {
@@ -84,7 +91,7 @@ const onSceneProgress = (value) => {
       <DanceMan ref="danceRef" @progress="onSceneProgress" @loaded="onSceneLoaded" />
     </div>
 
-    <Preloader v-if="showPreloader" :progress="loadProgress" :done="isLoaded" />
+    <Preloader v-if="showPreloader" :progress="loadProgress" :done="isLoaded" @complete="onPreloaderComplete" />
   </div>
 </template>
 

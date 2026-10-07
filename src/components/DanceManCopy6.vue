@@ -42,11 +42,13 @@ let interiorDim = { value: 1 }
 let triggerContact = () => {}
 let triggerProjects = () => {}
 let setScreenImage = () => {}
+let startIntro = () => {}
 
 defineExpose({
   triggerContact: (...args) => triggerContact(...args),
   triggerProjects: (...args) => triggerProjects(...args),
-  setScreenImage: (...args) => setScreenImage(...args)
+  setScreenImage: (...args) => setScreenImage(...args),
+  startIntro: (...args) => startIntro(...args)
 })
 
 onBeforeUnmount(() => {
@@ -136,20 +138,27 @@ onMounted(() => {
   const cameraStartPosition = new THREE.Vector3(10, 1, 105)
   const cameraTarget = new THREE.Vector3(-5.5, 0, 88)
 
-  // Start kameraet lidt til venstre (roteret om target) og glid ind til den rigtige position.
+  // Start kameraet lidt til venstre (roteret om target); glid ind når introen trigges.
   const introOffset = cameraStartPosition.clone().sub(cameraTarget)
   introOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), THREE.MathUtils.degToRad(18))
   camera.position.copy(cameraTarget).add(introOffset)
   camera.lookAt(cameraTarget)
-  gsap.to(camera.position, {
-    x: cameraStartPosition.x,
-    y: cameraStartPosition.y,
-    z: cameraStartPosition.z,
-    duration: 2.6,
-    delay: 0.8,
-    ease: 'power2.out',
-    onUpdate: () => camera.lookAt(cameraTarget)
-  })
+
+  // Introen holdes tilbage til preloaderen er væk, så den ikke spiller bag loaderen.
+  let introStarted = false
+  startIntro = () => {
+    if (introStarted || isDisposed) return
+    introStarted = true
+    gsap.to(camera.position, {
+      x: cameraStartPosition.x,
+      y: cameraStartPosition.y,
+      z: cameraStartPosition.z,
+      duration: 2.6,
+      delay: 0.3,
+      ease: 'power2.out',
+      onUpdate: () => camera.lookAt(cameraTarget)
+    })
+  }
 
   // Lights
   RectAreaLightUniformsLib.init()
@@ -415,7 +424,7 @@ onMounted(() => {
   modelHolder.position.set(-10, -2.6, 43)
   scene.add(modelHolder)
 
-  loader.load('/model/denrigtigedans.glb', (gltf) => {
+  loader.load('/model/denrigtigedans.opt.glb', (gltf) => {
     if (isDisposed) {
       disposeLoadedAsset(gltf.scene)
       return
@@ -497,7 +506,7 @@ onMounted(() => {
     return hsl.s > 0.5 && hsl.l > 0.1 && hsl.l < 0.6 && (hsl.h < 0.04 || hsl.h > 0.96)
   }
 
-  carLoader.load('/model/delo1.opt.glb', (gltf) => {
+  carLoader.load('/model/delo1.web.glb', (gltf) => {
     if (isDisposed) {
       disposeLoadedAsset(gltf.scene)
       return
@@ -588,8 +597,8 @@ onMounted(() => {
 
     camera.lookAt(cameraTarget)
 
-    // Tæl videre indtil både lys-, tåge- og interiør-fade er færdige (interiøret tager længst).
-    if (lightFadeElapsed < interiorFadeDelay + interiorFadeDuration) {
+    // Fade-timerne kører først når introen er trigget (efter preloaderen er væk).
+    if (introStarted && lightFadeElapsed < interiorFadeDelay + interiorFadeDuration) {
       lightFadeElapsed += delta
       const startFade = Math.max(0, lightFadeElapsed - lightFadeDelay)
       lightFadeProgress = Math.min(1, startFade / lightFadeDuration)

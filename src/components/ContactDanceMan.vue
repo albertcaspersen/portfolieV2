@@ -7,6 +7,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import gsap from 'gsap'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 
 const canvasRef = ref(null)
 
@@ -47,10 +48,11 @@ onMounted(() => {
 
   clock = new THREE.Clock()
   const loader = new GLTFLoader()
+  loader.setMeshoptDecoder(MeshoptDecoder)
   const modelHolder = new THREE.Group()
   scene.add(modelHolder)
 
-  loader.load('/model/contactDance.glb', (gltf) => {
+  loader.load('/model/contactDance.opt.glb', (gltf) => {
     if (isDisposed) {
       disposeLoadedAsset(gltf.scene)
       return
