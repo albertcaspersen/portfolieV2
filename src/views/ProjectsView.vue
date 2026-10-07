@@ -6,10 +6,12 @@ import Navbar from '../components/Navbar.vue'
 import NoiseWipeImage from '../components/NoiseWipeImage.vue'
 import { projects } from '../data/projects.js'
 import { preloadVideo } from '../composables/useVideoPreload.js'
+import { useSmoothScroll } from '../composables/useSmoothScroll.js'
 
 const router = useRouter()
 const rootRef = ref(null)
 const rowRef = ref(null)
+const smoothScroll = useSmoothScroll(rowRef, { axis: 'x', lerp: 0.08 })
 const activeIndex = ref(null)
 const revealPoints = ref({})
 const rowHeight = ref(0)
@@ -49,16 +51,7 @@ const scrollToOtherEnd = () => {
   const el = rowRef.value
   if (!el) return
   const maxScroll = el.scrollWidth - el.clientWidth
-  el.scrollTo({ left: atEnd.value ? 0 : maxScroll, behavior: 'smooth' })
-}
-
-// Drive horizontal scroll manually so diagonal trackpad swipes never bleed into vertical rubber-banding.
-const handleWheel = (event) => {
-  const el = rowRef.value
-  if (!el || !hasOverflow.value) return
-  event.preventDefault()
-  const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
-  el.scrollLeft += delta
+  smoothScroll.scrollTo(atEnd.value ? 0 : maxScroll)
 }
 
 const setActive = (index) => {
@@ -81,7 +74,6 @@ onMounted(() => {
   layoutRow()
   window.addEventListener('resize', layoutRow)
   rowRef.value?.addEventListener('scroll', updateScrollEnd, { passive: true })
-  rowRef.value?.addEventListener('wheel', handleWheel, { passive: false })
 
   // Warm the browser cache so project videos are ready the moment a card is clicked.
   projects.forEach((project) => {
@@ -113,7 +105,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', layoutRow)
   rowRef.value?.removeEventListener('scroll', updateScrollEnd)
-  rowRef.value?.removeEventListener('wheel', handleWheel)
 })
 </script>
 

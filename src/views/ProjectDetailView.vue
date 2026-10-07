@@ -235,7 +235,7 @@ onUnmounted(() => {
 
 .project-close {
   position: fixed;
-  top: 1.5rem;
+  top: 1.2rem;
   left: 1rem;
   z-index: 35;
   display: grid;
@@ -261,12 +261,11 @@ onUnmounted(() => {
 }
 
 .project-close svg {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 2.5;
-  stroke-linecap: round;
+  stroke-width: 2;
 }
 
 .transition-overlay {
