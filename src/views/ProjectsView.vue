@@ -102,10 +102,12 @@ onUnmounted(() => {
       :style="{ '--row-height': rowHeight ? rowHeight + 'px' : 'auto' }"
       @mouseleave="clearActive"
     >
-      <article
+      <a
         v-for="(project, index) in projects"
         :key="project.title"
         class="project-card"
+        :href="`/projects/${project.slug}`"
+        :aria-label="`View ${project.title} project`"
         :class="{
           'is-active': activeIndex === index,
           'is-dimmed': activeIndex !== null && activeIndex !== index
@@ -113,7 +115,7 @@ onUnmounted(() => {
         :style="{ width: cardWidths[index] ? cardWidths[index] + 'px' : 'auto' }"
         @mouseenter="setActive(index)"
         @mousemove="updateReveal($event, index)"
-        @click="openProject(project)"
+        @click.prevent="openProject(project)"
       >
         <div class="card-media">
           <img class="card-base" :src="project.image" :alt="project.title" />
@@ -135,7 +137,7 @@ onUnmounted(() => {
             <span class="card-tag">{{ project.tag }}</span>
           </div>
         </div>
-      </article>
+      </a>
     </main>
 
   </div>
@@ -212,6 +214,8 @@ onUnmounted(() => {
   flex-direction: column;
   gap: max(8px, 0.7vw);
   cursor: pointer;
+  color: inherit;
+  text-decoration: none;
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.55s ease;
   will-change: transform, opacity;
   padding-bottom: 8px;

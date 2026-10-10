@@ -63,7 +63,7 @@ onMounted(() => {
           <div class="about-info reveal">
             <h2 class="about-label">About me</h2>
             <p class="about-bio">
-           I’m a creative developer with a background in visual communication and coded design. I work somewhere between creative coding, 3D, motion and interaction, turning ideas into digital experiences. I like experimenting, trying things that might not work and seeing where they take me. Whether it’s an interactive website, a digital tool or something that’s hard to put a label on, I’m always curious to see what’s possible. I’m also a music producer, with years of experience in hip-hop and trap. Different disciplines, same curiosity for creating.
+           I’m Albert Caspersen, a creative developer with a background in visual communication and coded design. I work somewhere between creative coding, 3D, motion and interaction, turning ideas into digital experiences. I like experimenting, trying things that might not work and seeing where they take me. Whether it’s an interactive website, a digital tool or something that’s hard to put a label on, I’m always curious to see what’s possible. I’m also a music producer, with years of experience in hip-hop and trap. Different disciplines, same curiosity for creating.
             </p>
           </div>
 
