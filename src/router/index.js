@@ -24,7 +24,11 @@ const router = createRouter({
     },
     {
       path: '/projects/projection',
-      redirect: '/projects/processing',
+      redirect: '/projects',
+    },
+    {
+      path: '/projects/processing',
+      redirect: '/projects',
     },
     {
       path: '/projects/:slug',

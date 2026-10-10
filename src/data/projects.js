@@ -11,7 +11,7 @@ export const projects = [
     ratio: 1151 / 1367,
     description:
       'Tekstilo is a digital tool designed to make better use of leftover fabric. By photographing a fabric piece, the tool analyses its shape and identifies sewing patterns that can fit within the available material, helping reduce waste while making sewing more accessible and intuitive.',
-    video: null,
+    video: '/projektvideo/tekstiloFilm.mp4',
     tech: ['Branding', 'Vue.js', 'GSAP', 'UX/UI', 'Computer Vision', 'JavaScript', 'Vector processing'],
     gallery: [
       '/projektvideo/tekstilopics/image%2056.png',
@@ -68,23 +68,6 @@ export const projects = [
       '/projektvideo/HavetUnderPrespics/havetpic1.png',
       '/projektvideo/HavetUnderPrespics/havetpic2.png',
     ],
-  },
-  {
-    slug: 'processing',
-    title: 'Processing',
-    tag: 'Installation',
-    year: '2023',
-    image: '/projectPics/projectionproject.png',
-    ratio: 810 / 1455,
-    description:
-      'A projection installation exploring light as a spatial material, mapping moving imagery onto physical surfaces.',
-    video: null,
-    videos: [
-      '/projektvideo/Processing/spherePort.mp4',
-      '/projektvideo/Processing/Sk%C3%A6rmoptagelse%202026-10-06%20kl.%2015.42.25.mp4',
-    ],
-    tech: ['Installation', 'Projection mapping', 'TouchDesigner'],
-    gallery: [],
   },
 ]
 
