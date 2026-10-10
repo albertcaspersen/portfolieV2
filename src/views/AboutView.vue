@@ -278,8 +278,14 @@ onMounted(() => {
     aspect-ratio: 3 / 4;
   }
 
+  .about-image img {
+    filter: none;
+  }
+
   .headline {
-    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    order: -1;
+    margin-top: clamp(2rem, 7vh, 3.5rem);
+    font-size: clamp(1.6rem, 6.9vw, 2.4rem);
   }
 
   .about-bio {

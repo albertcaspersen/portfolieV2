@@ -186,5 +186,9 @@ const onSceneProgress = (value) => {
   .name-line {
     font-size: clamp(2.5rem, 13vw, 4rem);
   }
+
+  .name {
+    gap: clamp(3px, 1vw, 6px);
+  }
 }
 </style>

@@ -30,6 +30,8 @@ let currentProgress = 0
 let targetProgress = 0
 let wasActive = false
 let lastTime = 0
+const mobileQuery = window.matchMedia('(max-width: 860px)')
+let initialized = false
 
 const vertexShaderSource = `
   attribute vec2 a_position;
@@ -267,8 +269,18 @@ watch(
   }
 )
 
-onMounted(init)
+const initOnDesktop = () => {
+  if (mobileQuery.matches || initialized) return
+  initialized = true
+  init()
+}
+
+onMounted(() => {
+  initOnDesktop()
+  mobileQuery.addEventListener('change', initOnDesktop)
+})
 onUnmounted(() => {
+  mobileQuery.removeEventListener('change', initOnDesktop)
   resizeObserver?.disconnect()
   cancelAnimationFrame(animationFrame)
   if (texture && gl) gl.deleteTexture(texture)
@@ -290,5 +302,11 @@ onUnmounted(() => {
   height: 100%;
   display: block;
   pointer-events: none;
+}
+
+@media (max-width: 860px) {
+  .noise-wipe-image {
+    display: none;
+  }
 }
 </style>

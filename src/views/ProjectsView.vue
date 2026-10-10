@@ -328,11 +328,12 @@ onUnmounted(() => {
 
   .projects-header {
     margin-top: 3.7rem;
+    
   }
 
   .title {
-    font-size: clamp(1.0rem, 6vw, 2.0rem);
-    max-width: 90%;
+    font-size: clamp(1.6rem, 6.9vw, 2.4rem);
+    max-width: 100%;
   }
 
   .project-card {
