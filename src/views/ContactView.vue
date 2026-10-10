@@ -95,8 +95,8 @@ onMounted(() => {
 
 @media (max-width: 640px) {
   .headline {
-    font-size: clamp(1.5rem, 5vw, 2.5rem);
-    margin-top: 0.8rem;
+    margin-top: clamp(2rem, 7vh, 3.5rem);
+    font-size: clamp(1.6rem, 6.9vw, 2.4rem);
   }
 }
 </style>
