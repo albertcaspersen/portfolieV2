@@ -19,6 +19,7 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 
 const canvasRef = ref(null)
 const cursorRef = ref(null)
+const isMobile = window.matchMedia('(max-width: 640px), (hover: none) and (pointer: coarse)').matches
 const hasInteracted = ref(false)
 const isMuted = ref(false)
 const isHolding = ref(false)
@@ -394,7 +395,7 @@ onMounted(() => {
     cursorTarget.x = e.clientX
     cursorTarget.y = e.clientY
   }
-  window.addEventListener('pointermove', onCursorMove)
+  if (!isMobile) window.addEventListener('pointermove', onCursorMove)
 
   const lightTargets = {
     spotLight: 0,
@@ -454,6 +455,7 @@ onMounted(() => {
   const carLoader = new GLTFLoader(loadingManager)
   carLoader.setMeshoptDecoder(MeshoptDecoder)
   const carHolder = new THREE.Group()
+  carHolder.visible = !isMobile
   carHolder.position.set(2, -2.6, 82)
   carHolder.rotation.y = Math.PI / 0.125
   carHolder.scale.setScalar(1.4)
@@ -506,34 +508,36 @@ onMounted(() => {
     return hsl.s > 0.5 && hsl.l > 0.1 && hsl.l < 0.6 && (hsl.h < 0.04 || hsl.h > 0.96)
   }
 
-  carLoader.load('/model/delo1.web.glb', (gltf) => {
-    if (isDisposed) {
-      disposeLoadedAsset(gltf.scene)
-      return
-    }
-    const car = gltf.scene
-    car.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true
-        child.receiveShadow = true
-        const mats = Array.isArray(child.material) ? child.material : [child.material]
-        mats.forEach((mat) => {
-          if (isRedTaillight(mat)) {
-            mat.emissive = new THREE.Color(0xFF1A1A)
-            mat.emissiveIntensity = 0
-            mat.needsUpdate = true
-            taillightMaterials.push(mat)
-          }
-        })
+  if (!isMobile) {
+    carLoader.load('/model/delo1.web.glb', (gltf) => {
+      if (isDisposed) {
+        disposeLoadedAsset(gltf.scene)
+        return
       }
+      const car = gltf.scene
+      car.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true
+          child.receiveShadow = true
+          const mats = Array.isArray(child.material) ? child.material : [child.material]
+          mats.forEach((mat) => {
+            if (isRedTaillight(mat)) {
+              mat.emissive = new THREE.Color(0xFF1A1A)
+              mat.emissiveIntensity = 0
+              mat.needsUpdate = true
+              taillightMaterials.push(mat)
+            }
+          })
+        }
+      })
+      carHolder.add(car)
+      carHolder.traverse((child) => {
+        if (child.isMesh) {
+          child.castShadow = true
+        }
+      })
     })
-    carHolder.add(car)
-    carHolder.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true
-      }
-    })
-  })
+  }
 
   // Render loop
   let bassEnv = 0
@@ -695,7 +699,7 @@ onMounted(() => {
     }
     cursorAnimationId = requestAnimationFrame(updateCursor)
   }
-  updateCursor()
+  if (!isMobile) updateCursor()
 
   window.addEventListener('resize', resize)
 
@@ -752,6 +756,12 @@ function disposeLoadedAsset(root) {
   pointer-events: none;
   z-index: 9999;
   will-change: transform;
+}
+
+@media (hover: none), (pointer: coarse), (max-width: 640px) {
+  .cursor-circle {
+    display: none;
+  }
 }
 
 .cursor-progress {

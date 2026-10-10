@@ -99,6 +99,7 @@ const onSceneProgress = (value) => {
 .page {
   position: relative;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -110,7 +111,7 @@ const onSceneProgress = (value) => {
   position: absolute;
   inset: 0;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   margin: 0;
   overflow: hidden;
   background: transparent;
@@ -174,5 +175,16 @@ const onSceneProgress = (value) => {
   color: #FF0059;
   font-weight: 400;
   text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .header-left {
+    left: max(16px, env(safe-area-inset-left));
+    bottom: max(18px, env(safe-area-inset-bottom));
+  }
+
+  .name-line {
+    font-size: clamp(2.5rem, 13vw, 4rem);
+  }
 }
 </style>

@@ -15,8 +15,8 @@ const items = [
 ]
 
 const socialItems = [
+  { label: 'LinkedIn', link: 'https://www.linkedin.com/in/albert-valdemar-caspersen-a9a433331/' },
   { label: 'Instagram', link: 'https://www.instagram.com/albert_caspersen/' },
-  { label: 'LinkedIn', link: '#' },
   { label: 'GitHub', link: '#' },
 ]
 

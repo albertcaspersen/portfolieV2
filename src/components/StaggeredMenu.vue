@@ -890,10 +890,19 @@ defineExpose({ closeMenu, toggleMenu });
 }
 
 @media (max-width: 640px) {
+  .sm-scope .staggered-menu-header {
+    padding-right: max(20px, 2vw);
+  }
   .sm-scope .staggered-menu-panel {
     width: 100%;
     left: 0;
     right: 0;
+  }
+  .sm-scope .sm-panel-item {
+    font-size: 3.4rem;
+  }
+  .sm-scope .sm-panel-list[data-numbering] .sm-panel-item::after {
+    right: 2.5em;
   }
   .sm-scope .staggered-menu-wrapper[data-open] .sm-logo-img {
     filter: invert(100%);

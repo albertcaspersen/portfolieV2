@@ -92,4 +92,11 @@ onMounted(() => {
   text-decoration: none;
   align-self: flex-start;
 }
+
+@media (max-width: 640px) {
+  .headline {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    margin-top: 0.8rem;
+  }
+}
 </style>

@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  scrollBehavior(to) {
+    if (to.name === 'project-detail') return { top: 0 }
+  },
   routes: [
     {
       path: '/',

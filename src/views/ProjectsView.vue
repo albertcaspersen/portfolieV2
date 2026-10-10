@@ -11,12 +11,13 @@ import { useSmoothScroll } from '../composables/useSmoothScroll.js'
 const router = useRouter()
 const rootRef = ref(null)
 const rowRef = ref(null)
-const smoothScroll = useSmoothScroll(rowRef, { axis: 'x', lerp: 0.08 })
+// Keep the eased wheel scrolling for the desktop horizontal row only.
+if (window.matchMedia('(min-width: 861px)').matches) {
+  useSmoothScroll(rowRef, { axis: 'x', lerp: 0.08 })
+}
 const activeIndex = ref(null)
 const revealPoints = ref({})
 const rowHeight = ref(0)
-const hasOverflow = ref(false)
-const atEnd = ref(false)
 
 const cardWidths = ref(projects.map(() => 0))
 
@@ -32,26 +33,6 @@ const layoutRow = () => {
   const height = Math.max(340, Math.min(window.innerHeight * 0.68, 760))
   rowHeight.value = height
   cardWidths.value = projects.map((p) => p.ratio * height)
-
-  const colGap = parseFloat(getComputedStyle(el).columnGap) || 0
-  const totalWidth =
-    cardWidths.value.reduce((sum, w) => sum + w, 0) + colGap * (projects.length - 1)
-  hasOverflow.value = totalWidth > el.clientWidth + 4
-  updateScrollEnd()
-}
-
-const updateScrollEnd = () => {
-  const el = rowRef.value
-  if (!el) return
-  const maxScroll = el.scrollWidth - el.clientWidth
-  atEnd.value = el.scrollLeft >= maxScroll - 2
-}
-
-const scrollToOtherEnd = () => {
-  const el = rowRef.value
-  if (!el) return
-  const maxScroll = el.scrollWidth - el.clientWidth
-  smoothScroll.scrollTo(atEnd.value ? 0 : maxScroll)
 }
 
 const setActive = (index) => {
@@ -78,7 +59,6 @@ const updateReveal = (event, index) => {
 onMounted(() => {
   layoutRow()
   window.addEventListener('resize', layoutRow)
-  rowRef.value?.addEventListener('scroll', updateScrollEnd, { passive: true })
 
   gsap.fromTo(
     rootRef.value.querySelectorAll('.reveal'),
@@ -103,7 +83,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('resize', layoutRow)
-  rowRef.value?.removeEventListener('scroll', updateScrollEnd)
 })
 </script>
 
@@ -159,19 +138,6 @@ onUnmounted(() => {
       </article>
     </main>
 
-    <footer class="projects-footer">
-      <div class="footer-right">
-        <button
-          v-if="hasOverflow"
-          class="reveal scroll-btn"
-          type="button"
-          @click="scrollToOtherEnd"
-        >
-          <span>{{ atEnd ? 'BACK TO START' : 'SEE MORE' }}</span>
-          <span class="scroll-arrow">{{ atEnd ? '←' : '→' }}</span>
-        </button>
-      </div>
-    </footer>
   </div>
 </template>
 
@@ -217,7 +183,7 @@ onUnmounted(() => {
   color: #ff0059;
 }
 
-/* Row scrolls sideways — images run off-screen and are reached via the button */
+/* Row scrolls sideways; wheel and touch input navigate the projects. */
 .projects-row {
   flex: 1 1 auto;
   min-height: 0;
@@ -342,78 +308,31 @@ onUnmounted(() => {
   opacity: 0.45;
 }
 
-.projects-footer {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer-right {
-  display: flex;
-  align-items: center;
-  gap: max(16px, 1.4vw);
-}
-
-.scroll-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: max(8px, 0.5vw) max(14px, 0.9vw);
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  color: #ffffff;
-  font-family: inherit;
-  font-size: max(0.72rem, 0.8vw);
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
-}
-
-.scroll-btn:hover {
-  border-color: #ff0059;
-  color: #ff0059;
-}
-
-.scroll-arrow {
-  transition: transform 0.3s ease;
-}
-
-.scroll-btn:hover .scroll-arrow {
-  transform: translateX(3px);
-}
-
-.back {
-  font-size: max(0.75rem, 0.85vw);
-  letter-spacing: 0.08em;
-  color: #ffffff;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.back:hover {
-  color: #ff0059;
-}
-
-.count {
-  font-size: max(0.7rem, 0.8vw);
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.5);
-}
-
 /* Tablet / mobile — stack into a scrollable column */
 @media (max-width: 860px) {
   .projects-page {
     position: relative;
     min-height: 100vh;
-    overflow-y: auto;
+    min-height: 100dvh;
+    overflow: visible;
   }
 
   .projects-row {
     flex-direction: column;
     align-items: stretch;
     gap: clamp(20px, 5vw, 32px);
+    overflow: visible;
+    overscroll-behavior: auto;
+    touch-action: pan-y;
+  }
+
+  .projects-header {
+    margin-top: 3.7rem;
+  }
+
+  .title {
+    font-size: clamp(1.0rem, 6vw, 2.0rem);
+    max-width: 90%;
   }
 
   .project-card {

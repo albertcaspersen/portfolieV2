@@ -27,6 +27,12 @@ const projectVideos = computed(() => {
   return project.value.videos ?? (project.value.video ? [project.value.video] : [])
 })
 
+const playVideo = (event) => {
+  const video = event.currentTarget
+  video.muted = true
+  video.play().catch(() => {})
+}
+
 // Images shown on the right, newest-to-oldest. Fall back to the single cover.
 const galleryImages = computed(() => {
   if (!project.value) return []
@@ -35,6 +41,7 @@ const galleryImages = computed(() => {
 
 const goBack = () => router.push('/projects')
 
+const pinkOverlayRef = ref(null)
 const overlayRef = ref(null)
 const isTransitioning = ref(false)
 
@@ -105,15 +112,19 @@ const openProject = (item, direction = 1) => {
   if (isTransitioning.value || item.slug === route.params.slug) return
   isTransitioning.value = true
 
-  const panel = overlayRef.value
-  // Dark panel sweeps in from the clicked side, covers everything, then exits the far side.
-  gsap.set(panel, { xPercent: 100 * direction, autoAlpha: 1 })
+  const pinkPanel = pinkOverlayRef.value
+  const darkPanel = overlayRef.value
+  const panels = [pinkPanel, darkPanel]
+  // Sweep the pink accent in immediately ahead of the dark cover.
+  gsap.set(panels, { xPercent: 100 * direction, autoAlpha: 1 })
 
   const tl = gsap.timeline()
-  tl.to(panel, { xPercent: 0, duration: 0.5, ease: 'power3.inOut' })
+  tl.to(pinkPanel, { xPercent: 0, duration: 0.5, ease: 'power3.inOut' }, 0)
+    .to(darkPanel, { xPercent: 0, duration: 0.5, ease: 'power3.inOut' }, 0.07)
     .add(() => router.push(`/projects/${item.slug}`))
-    .to(panel, { xPercent: -100 * direction, duration: 0.6, ease: 'power3.inOut' }, '+=0.08')
-    .set(panel, { autoAlpha: 0 })
+    .to(darkPanel, { xPercent: -100 * direction, duration: 0.5, ease: 'power3.inOut' }, '+=0.08')
+    .to(pinkPanel, { xPercent: -100 * direction, duration: 0.5, ease: 'power3.inOut' }, '<')
+    .set(panels, { autoAlpha: 0 })
     // Transition done — now play the text/media in. Chrome stays put.
     .add(() => {
       isTransitioning.value = false
@@ -163,6 +174,7 @@ onUnmounted(() => {
 
 <template>
   <div ref="rootRef" v-if="project" class="project-detail">
+    <div ref="pinkOverlayRef" class="transition-overlay transition-overlay-pink" aria-hidden="true"></div>
     <div ref="overlayRef" class="transition-overlay" aria-hidden="true"></div>
     <Navbar class="page-nav reveal-chrome" />
     <button class="project-close reveal-chrome" type="button" aria-label="Tilbage til projekter" @click="goBack">
@@ -184,9 +196,12 @@ onUnmounted(() => {
           <span class="detail-tag reveal-text">{{ project.tag }} • {{ project.year }}</span>
           <div class="detail-text">
             <p class="detail-description reveal-text">{{ project.description }}</p>
-            <ul v-if="project.tech?.length" class="detail-tech">
-              <li v-for="item in project.tech" :key="item" class="reveal-text">{{ item }}</li>
-            </ul>
+            <div v-if="project.tech?.length" class="detail-stack">
+              <span class="detail-stack-label reveal-text">[Stack]</span>
+              <ul class="detail-tech">
+                <li v-for="item in project.tech" :key="item" class="reveal-text">{{ item }}</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -198,10 +213,12 @@ onUnmounted(() => {
           class="media-item reveal-media"
           :src="src"
           autoplay
-          muted
+          :muted="true"
           loop
           playsinline
+          webkit-playsinline
           preload="auto"
+          @canplay="playVideo"
         ></video>
         <img
           v-for="(src, i) in galleryImages"
@@ -235,7 +252,7 @@ onUnmounted(() => {
 
 .project-close {
   position: fixed;
-  top: 1.2rem;
+  top: 1.05rem;
   left: 1rem;
   z-index: 35;
   display: grid;
@@ -277,6 +294,11 @@ onUnmounted(() => {
   will-change: transform;
 }
 
+.transition-overlay-pink {
+  z-index: 58;
+  background: #ff0059;
+}
+
 .project-switcher {
   position: absolute;
   grid-column: 2;
@@ -308,8 +330,10 @@ onUnmounted(() => {
   transition: color 180ms ease;
 }
 
-.project-switcher button:hover {
-  color: #ffffff;
+@media (hover: hover) and (pointer: fine) {
+  .project-switcher button:hover {
+    color: #ffffff;
+  }
 }
 
 .project-switcher button:focus-visible {
@@ -353,7 +377,7 @@ onUnmounted(() => {
 }
 
 .detail-tag {
-  font-size: 0.95em;
+  font-size: 1.05em;
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.6);
 }
@@ -373,6 +397,18 @@ onUnmounted(() => {
   color: rgba(255, 255, 255, 0.82);
   max-width: 34ch;
   text-align: justify;
+}
+
+.detail-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.detail-stack-label {
+  font-size: 1.05em;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .detail-tech {
@@ -417,10 +453,16 @@ onUnmounted(() => {
 }
 
 @media (max-width: 860px) {
+  .project-close {
+    display: none;
+  }
+
   .project-switcher {
     position: fixed;
     grid-column: auto;
     grid-row: auto;
+    left: max(16px, 4vw);
+    z-index: 20;
     gap: 0.6rem;
     font-size: 1.1rem;
   }
@@ -440,7 +482,7 @@ onUnmounted(() => {
     align-self: stretch;
     justify-content: flex-start;
     gap: clamp(24px, 6vw, 40px);
-    padding: max(16px, 4vw);
+    padding: clamp(110px, 16vh, 150px) max(16px, 4vw) 0;
     transform: none;
     font-size: clamp(14px, 3.6vw, 18px);
   }
@@ -454,9 +496,17 @@ onUnmounted(() => {
     gap: max(10px, 2vw);
   }
 
+  .detail-tech {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: clamp(12px, 4vw, 24px);
+    row-gap: 8px;
+  }
+
   .detail-media {
     overflow: visible;
     height: auto;
+    padding-top: clamp(24px, 4vh, 48px);
   }
 }
 </style>

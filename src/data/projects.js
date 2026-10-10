@@ -61,7 +61,7 @@ export const projects = [
     image: '/projectPics/havetFront.png',
     ratio: 2048 / 1365,
     description:
-      'Havet under pres is an interactive educational game created with Videnskab.dk as a fictional client. Designed for school children, the project explores how complex topics about the ocean and the challenges it faces can be communicated through play and interaction. The digital experience is designed to connect with a physical arcade station using a joystick and button, turning learning into a more engaging and hands-on experience.',
+      'Havet under pres is an interactive educational game designed for school children, with Videnskab.dk as a fictional client. Through a digital experience connected to a physical arcade station with a joystick and button, the project makes learning about the ocean and its challenges engaging and hands-on.',
     video: '/projektvideo/HavetUnderPres.mp4',
     tech: ['Three.js', 'webGL', 'GSAP', 'UX/UI'],
     gallery: [
