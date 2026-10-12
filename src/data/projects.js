@@ -47,7 +47,7 @@ export const projects = [
     description:
       'Flowmate is a headless CMS platform built to give teams more freedom when creating and managing websites. During my internship at Checkmate, I created a concept website for Flowmate, exploring how the brand and product could be presented through a more engaging and visually distinct digital experience.',
     video: '/projektvideo/flowmateVideo.mp4',
-    tech: ['Vue.js', 'GSAP', 'OpenGL', 'UX/UI'],
+    tech: ['Vue.js', 'GSAP', 'OpenGL', 'UX/UI', 'Three.js'],
     gallery: [
       '/projektvideo/flowmatepics/image%2060.png',
       '/projektvideo/flowmatepics/image%2061.png',
@@ -63,7 +63,7 @@ export const projects = [
     description:
       'Havet under pres is an interactive educational game designed for school children, with Videnskab.dk as a fictional client. Through a digital experience connected to a physical arcade station with a joystick and button, the project makes learning about the ocean and its challenges engaging and hands-on.',
     video: '/projektvideo/HavetUnderPres.mp4',
-    tech: ['Three.js', 'webGL', 'GSAP', 'UX/UI'],
+    tech: ['Three.js', 'webGL', 'GSAP', 'UX/UI', 'OpenAI API', 'Blender'],
     gallery: [
       '/projektvideo/HavetUnderPrespics/havetpic1.png',
       '/projektvideo/HavetUnderPrespics/havetpic2.png',
