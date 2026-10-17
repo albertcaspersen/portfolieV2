@@ -31,6 +31,19 @@ onMounted(() => {
     { opacity: 0, y: 24 },
     { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.08, delay: 0.15 }
   )
+
+  gsap.fromTo(
+    rootRef.value.querySelector('.about-image'),
+    { opacity: 0, y: 40, clipPath: 'inset(100% 0 0 0)' },
+    {
+      opacity: 1,
+      y: 0,
+      clipPath: 'inset(0% 0 0 0)',
+      duration: 1.5,
+      ease: 'power3.out',
+      delay: 0.35
+    }
+  )
 })
 </script>
 
@@ -40,7 +53,7 @@ onMounted(() => {
 
     <main class="about-main">
       <div
-        class="about-image reveal"
+        class="about-image"
         @mousemove="updateImageReveal"
         @mouseleave="hideImageReveal"
       >
